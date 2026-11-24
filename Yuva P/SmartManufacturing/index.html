@@ -1,0 +1,580 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Smart Manufacturing // Yuva P's Lab Desk</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --ink: #e8faff;
+      --muted: #9dc8d9;
+      --cyan: #45f3ff;
+      --pink: #ff65cf;
+      --lime: #c4ff72;
+      --panel: #101b3b;
+      --line: #436a9b;
+      --deep: #080d22;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background:
+        radial-gradient(ellipse at 50% 0%, #233d70 0, transparent 48%),
+        repeating-linear-gradient(0deg, #0b1129 0, #0b1129 2px, #0d1530 3px, #0d1530 4px);
+      color: var(--ink);
+      font: 16px/1.6 "Trebuchet MS", Verdana, sans-serif;
+    }
+
+    a { color: var(--cyan); }
+    a:hover { color: var(--pink); }
+
+    .wrap { width: min(1100px, 92%); margin: 0 auto; }
+
+    .topbar {
+      border-bottom: 2px solid var(--cyan);
+      background: #070b1beF;
+      box-shadow: 0 0 22px #45f3ff33;
+    }
+
+    .topbar-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      padding: .65rem 0;
+      color: var(--lime);
+      font: bold .8rem Consolas, monospace;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .hero { padding: 3.5rem 0 2rem; text-align: center; }
+
+    .badge {
+      display: inline-block;
+      padding: .25rem .7rem;
+      border: 1px solid var(--pink);
+      color: var(--pink);
+      background: #ff65cf12;
+      font: bold .76rem Consolas, monospace;
+      letter-spacing: .12em;
+    }
+
+    h1 {
+      margin: .65rem 0 .25rem;
+      color: var(--cyan);
+      font: 900 clamp(2.2rem, 7vw, 4.8rem)/1 "Trebuchet MS", sans-serif;
+      text-shadow: 3px 3px 0 #ff65cf, 0 0 26px #45f3ff77;
+    }
+
+    .subtitle { color: var(--muted); font-size: 1.08rem; }
+
+    .ticker {
+      overflow: hidden;
+      margin: 1.5rem auto 0;
+      max-width: 760px;
+      border: 1px solid var(--line);
+      background: #080d22;
+      color: var(--lime);
+      font: .85rem Consolas, monospace;
+      white-space: nowrap;
+    }
+
+    .ticker span {
+      display: inline-block;
+      padding: .4rem 0;
+      animation: scroll 20s linear infinite;
+    }
+
+    @keyframes scroll {
+      from { transform: translateX(100%); }
+      to { transform: translateX(-100%); }
+    }
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      border-block: 1px solid var(--line);
+      background: #080d22f2;
+      backdrop-filter: blur(8px);
+    }
+
+    nav .wrap {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: .35rem 1.1rem;
+      padding: .7rem 0;
+    }
+
+    nav a {
+      font: bold .82rem Consolas, monospace;
+      text-decoration: none;
+    }
+
+    main { padding: 1rem 0 3rem; }
+    section { padding-top: 1.2rem; scroll-margin-top: 4.5rem; }
+
+    h2 {
+      color: var(--pink);
+      font: bold 1.55rem Consolas, monospace;
+      text-shadow: 0 0 12px #ff65cf55;
+    }
+
+    h3 { color: var(--lime); font: bold 1rem Consolas, monospace; }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1rem; }
+
+    .card, .panel {
+      border: 1px solid var(--line);
+      background: linear-gradient(145deg, #14244b, var(--panel) 70%);
+      box-shadow: 5px 5px 0 #050817;
+      padding: 1rem 1.2rem;
+    }
+
+    .card p, .panel p { margin-bottom: 0; }
+    .label { color: var(--cyan); font: bold .78rem Consolas, monospace; text-transform: uppercase; }
+    .note { color: var(--muted); }
+
+    .table-scroll { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: .55rem .7rem; border: 1px solid var(--line); text-align: left; }
+    th { color: var(--cyan); background: #0a1230; }
+    td { background: #101b3bcc; }
+
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: .9rem; }
+    .field label { display: block; margin-bottom: .3rem; color: var(--cyan); font-weight: bold; }
+    .field input {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: var(--deep);
+      color: var(--ink);
+      padding: .65rem;
+      font: inherit;
+    }
+
+    .field input:focus { outline: 2px solid var(--cyan); outline-offset: 2px; }
+    .actions { display: flex; flex-wrap: wrap; gap: .7rem; margin-top: 1rem; }
+    .button {
+      border: 1px solid var(--cyan);
+      background: #45f3ff18;
+      color: var(--cyan);
+      padding: .65rem 1rem;
+      font: bold .9rem Consolas, monospace;
+      cursor: pointer;
+    }
+
+    .button:hover { background: #45f3ff30; }
+    .button.secondary { border-color: var(--pink); color: var(--pink); background: #ff65cf12; }
+    .status-message { min-height: 1.6em; color: var(--lime); }
+    .status-message[data-kind="error"] { color: #ff9b9b; }
+    .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: .7rem; margin: 1rem 0; }
+    .metric { border: 1px solid var(--line); background: #080d22; padding: .7rem; }
+    .metric span, .metric strong { display: block; }
+    .metric span { color: var(--muted); font-size: .82rem; }
+    .metric strong { color: var(--lime); font: bold 1.15rem Consolas, monospace; overflow-wrap: anywhere; }
+    .compact-list { padding-left: 1.2rem; }
+
+    pre {
+      overflow-x: auto;
+      margin: .6rem 0 1rem;
+      border: 1px solid #365684;
+      background: var(--deep);
+      color: #d9f7ff;
+      padding: 1rem;
+      font: .86rem/1.55 Consolas, "Courier New", monospace;
+      tab-size: 4;
+    }
+
+    code { font-family: Consolas, "Courier New", monospace; }
+    .inline-code { color: var(--lime); }
+
+    .explain-list { padding-left: 1.4rem; }
+    .explain-list li { margin: .55rem 0; }
+    .explain-list code { color: var(--cyan); }
+
+    .steps { counter-reset: step; list-style: none; padding: 0; }
+    .steps li {
+      counter-increment: step;
+      position: relative;
+      margin: .8rem 0;
+      padding: .8rem .9rem .8rem 3.1rem;
+      border: 1px solid var(--line);
+      background: #101b3b;
+    }
+
+    .steps li::before {
+      content: counter(step, decimal-leading-zero);
+      position: absolute;
+      left: .8rem;
+      color: var(--pink);
+      font: bold .9rem Consolas, monospace;
+    }
+
+    .callout {
+      border-left: 4px solid var(--lime);
+      background: #c4ff7210;
+      padding: .8rem 1rem;
+    }
+
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 1.3rem 0 2rem;
+      color: var(--muted);
+      text-align: center;
+      font: .8rem Consolas, monospace;
+    }
+
+    @media (max-width: 600px) {
+      .topbar-inner { justify-content: center; flex-wrap: wrap; }
+      .hero { padding-top: 2.2rem; }
+      nav { position: static; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="wrap topbar-inner">
+      <span>YUVA P // STUDENT LAB PORTAL</span>
+      <span>REG: 2615011380024</span>
+      <span>STATUS: READY_2000</span>
+    </div>
+  </div>
+
+  <header class="hero wrap">
+    <span class="badge">PRACTICAL LAB EXAM • OPEN LLM STUDY GUIDE</span>
+    <h1>Smart Manufacturing</h1>
+    <p class="subtitle">Production batches, cost analysis &amp; quality control</p>
+    <div class="ticker" aria-label="Project summary">
+      <span>★ PYTHON LISTS ★ TUPLES ★ FUNCTIONS ★ LAMBDA ★ MAP ★ FILTER ★ EXCEPTIONS ★ GIT ★ PULL REQUESTS ★</span>
+    </div>
+  </header>
+
+  <nav aria-label="Main navigation">
+    <div class="wrap">
+      <a href="#overview">OVERVIEW</a>
+      <a href="#data">DATA</a>
+      <a href="#live-demo">LIVE DEMO</a>
+      <a href="#source">PYTHON CODE</a>
+    </div>
+  </nav>
+
+  <main class="wrap">
+    <section id="overview">
+      <h2>01 / Mission Brief</h2>
+      <div class="grid">
+        <article class="card">
+          <div class="label">Objective</div>
+          <p>Track electronics production batches, compute manufacturing costs, and measure quality using defect counts.</p>
+        </article>
+        <article class="card">
+          <div class="label">Student</div>
+          <p>Yuva P<br>Registration number: 2615011380024</p>
+        </article>
+        <article class="card">
+          <div class="label">Files</div>
+          <p><code>manufacturing.py</code> runs the program.<br><code>manufacturing_utils.py</code> contains reusable calculations.</p>
+        </article>
+      </div>
+      <p class="callout"><strong>How to run:</strong> keep both Python files in the same folder, open a terminal in that folder, then run <code>py manufacturing.py</code> on Windows.</p>
+    </section>
+
+    <section id="data">
+      <h2>02 / Batch Database</h2>
+      <p>Each record is a tuple in this order: <code>(Batch_ID, Product_Name, Units_Produced, Defective_Units, Cost_Per_Unit)</code>.</p>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>ID</th><th>Product</th><th>Produced</th><th>Defective</th><th>Unit cost</th></tr></thead>
+          <tbody>
+            <tr><td>501</td><td>Circuit Board</td><td>100</td><td>5</td><td>$250</td></tr>
+            <tr><td>502</td><td>Power Supply</td><td>80</td><td>12</td><td>$400</td></tr>
+            <tr><td>503</td><td>Sensor</td><td>150</td><td>8</td><td>$180</td></tr>
+            <tr><td>504</td><td>Controller</td><td>60</td><td>3</td><td>$650</td></tr>
+            <tr><td>505</td><td>Connector</td><td>200</td><td>15</td><td>$50</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">Expected initial total cost: <strong>$133,000.00</strong>. Expected initial defect percentage: <strong>7.29%</strong> (43 defective out of 590 produced).</p>
+    </section>
+
+    <section id="live-demo">
+      <h2>LIVE / Interactive Browser Demo</h2>
+      <p class="callout">Enter a batch to add it to this page's live demo. The browser recalculates costs, defect percentage, high-defect batches, and accepted quantities. Demo changes stay in this page only and reset if you refresh.</p>
+      <div class="grid">
+        <form class="card" id="batchForm" novalidate>
+          <h3>Add a production batch</h3>
+          <div class="form-grid">
+            <div class="field">
+              <label for="demoBatchId">Batch ID</label>
+              <input id="demoBatchId" name="batchId" type="number" step="1" required>
+            </div>
+            <div class="field">
+              <label for="demoProductName">Product name</label>
+              <input id="demoProductName" name="productName" type="text" required>
+            </div>
+            <div class="field">
+              <label for="demoUnits">Units produced</label>
+              <input id="demoUnits" name="units" type="number" min="0" step="1" required>
+            </div>
+            <div class="field">
+              <label for="demoDefective">Defective units</label>
+              <input id="demoDefective" name="defective" type="number" min="0" step="1" required>
+            </div>
+            <div class="field">
+              <label for="demoUnitCost">Cost per unit</label>
+              <input id="demoUnitCost" name="unitCost" type="number" min="0" step="any" required>
+            </div>
+          </div>
+          <div class="actions">
+            <button class="button" type="submit">ADD BATCH + UPDATE</button>
+            <button class="button secondary" id="resetDemo" type="button">RESET DEMO</button>
+          </div>
+          <p class="status-message" id="demoMessage" role="status" aria-live="polite"></p>
+        </form>
+
+        <div class="panel" aria-live="polite">
+          <h3>Live production report</h3>
+          <div class="metrics">
+            <div class="metric"><span>Total batches</span><strong id="liveBatchCount">0</strong></div>
+            <div class="metric"><span>Total manufacturing cost</span><strong id="liveTotalCost">$0.00</strong></div>
+            <div class="metric"><span>Overall defect percentage</span><strong id="liveDefectRate">0.00%</strong></div>
+          </div>
+          <p><strong>Accepted quantities:</strong> <span id="liveAccepted">-</span></p>
+          <p><strong>More than 10 defective units:</strong></p>
+          <ul class="compact-list" id="liveHighDefect"></ul>
+        </div>
+      </div>
+
+      <h3>Current batches and costs</h3>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr><th>ID</th><th>Product</th><th>Produced</th><th>Defective</th><th>Accepted</th><th>Batch cost</th></tr>
+          </thead>
+          <tbody id="liveBatchRows"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="source">
+      <h2>03 / Source Code</h2>
+      <h3>manufacturing_utils.py</h3>
+      <pre><code>def calculate_total_cost(production):
+    return sum(batch[2] * batch[4] for batch in production)
+
+
+def calculate_defect_percentage(production):
+    total_units = sum(batch[2] for batch in production)
+    total_defective = sum(batch[3] for batch in production)
+
+    if total_units == 0:
+        return 0.0
+
+    return (total_defective / total_units) * 100</code></pre>
+
+      <h3>manufacturing.py</h3>
+      <pre><code>from manufacturing_utils import calculate_total_cost, calculate_defect_percentage
+
+production = [
+    (501, "Circuit Board", 100, 5, 250),
+    (502, "Power Supply", 80, 12, 400),
+    (503, "Sensor", 150, 8, 180),
+    (504, "Controller", 60, 3, 650),
+    (505, "Connector", 200, 15, 50)
+]
+
+
+def main():
+    print("Enter details for a new production batch.")
+
+    try:
+        batch_id = int(input("Batch ID: "))
+        product_name = input("Product name: ").strip()
+        units = int(input("Units produced: "))
+        defective = int(input("Defective units: "))
+        unit_cost = float(input("Cost per unit: "))
+
+        if not product_name:
+            raise ValueError("Product name cannot be empty.")
+        if units &lt; 0 or defective &lt; 0 or unit_cost &lt; 0:
+            raise ValueError("Quantities and unit cost cannot be negative.")
+        if defective &gt; units:
+            raise ValueError("Defective units cannot exceed units produced.")
+
+    except ValueError as error:
+        print(f"Batch not added: {error}")
+
+    else:
+        production.append((batch_id, product_name, units, defective, unit_cost))
+        print("Batch added successfully.")
+
+    finally:
+        print("Batch entry attempt finished.")
+
+    total_cost = calculate_total_cost(production)
+    defect_percentage = calculate_defect_percentage(production)
+
+    high_defect_batches = list(
+        filter(lambda batch: batch[3] &gt; 10, production)
+    )
+    accepted_quantities = list(
+        map(lambda batch: batch[2] - batch[3], production)
+    )
+    batch_costs = list(
+        map(lambda batch: batch[2] * batch[4], production)
+    )
+
+    print(f"\nTotal manufacturing cost: ${total_cost:.2f}")
+    print(f"Overall defect percentage: {defect_percentage:.2f}%")
+
+    print("\nManufacturing cost for each batch:")
+    for batch, cost in zip(production, batch_costs):
+        print(f"{batch[0]} - {batch[1]}: ${cost:.2f}")
+
+    print("\nBatches with more than 10 defective units:")
+    for batch in high_defect_batches:
+        print(batch)
+
+    print("\nAccepted production quantities:")
+    print(accepted_quantities)
+
+
+if __name__ == "__main__":
+    main()</code></pre>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="wrap">SMART MANUFACTURING // YUVA P // END OF TRANSMISSION</div>
+  </footer>
+  <script>
+    const initialProduction = [
+      [501, "Circuit Board", 100, 5, 250],
+      [502, "Power Supply", 80, 12, 400],
+      [503, "Sensor", 150, 8, 180],
+      [504, "Controller", 60, 3, 650],
+      [505, "Connector", 200, 15, 50]
+    ];
+    let demoProduction = initialProduction.map(batch => batch.slice());
+
+    const batchForm = document.getElementById("batchForm");
+    const demoMessage = document.getElementById("demoMessage");
+    const currencyFormat = new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD"
+    });
+
+    function showDemoMessage(message, kind) {
+      demoMessage.textContent = message;
+      demoMessage.dataset.kind = kind;
+    }
+
+    function renderDemo() {
+      const totalUnits = demoProduction.reduce((sum, batch) => sum + batch[2], 0);
+      const totalDefective = demoProduction.reduce((sum, batch) => sum + batch[3], 0);
+      const totalCost = demoProduction.reduce((sum, batch) => sum + batch[2] * batch[4], 0);
+      const defectRate = totalUnits === 0 ? 0 : (totalDefective / totalUnits) * 100;
+      const accepted = demoProduction.map(batch => batch[2] - batch[3]);
+      const highDefect = demoProduction.filter(batch => batch[3] > 10);
+
+      document.getElementById("liveBatchCount").textContent = String(demoProduction.length);
+      document.getElementById("liveTotalCost").textContent = currencyFormat.format(totalCost);
+      document.getElementById("liveDefectRate").textContent = `${defectRate.toFixed(2)}%`;
+      document.getElementById("liveAccepted").textContent = `[${accepted.join(", ")}]`;
+
+      const rows = demoProduction.map(batch => {
+        const row = document.createElement("tr");
+        const values = [
+          batch[0],
+          batch[1],
+          batch[2],
+          batch[3],
+          batch[2] - batch[3],
+          currencyFormat.format(batch[2] * batch[4])
+        ];
+
+        values.forEach(value => {
+          const cell = document.createElement("td");
+          cell.textContent = String(value);
+          row.append(cell);
+        });
+
+        return row;
+      });
+      document.getElementById("liveBatchRows").replaceChildren(...rows);
+
+      const defectItems = highDefect.map(batch => {
+        const item = document.createElement("li");
+        item.textContent = `Batch ${batch[0]} - ${batch[1]} (${batch[3]} defective)`;
+        return item;
+      });
+      if (defectItems.length === 0) {
+        const item = document.createElement("li");
+        item.textContent = "No batches exceed the threshold.";
+        defectItems.push(item);
+      }
+      document.getElementById("liveHighDefect").replaceChildren(...defectItems);
+    }
+
+    batchForm.addEventListener("submit", event => {
+      event.preventDefault();
+
+      const batchIdText = document.getElementById("demoBatchId").value.trim();
+      const productName = document.getElementById("demoProductName").value.trim();
+      const unitsText = document.getElementById("demoUnits").value.trim();
+      const defectiveText = document.getElementById("demoDefective").value.trim();
+      const unitCostText = document.getElementById("demoUnitCost").value.trim();
+
+      if (!batchIdText || !productName || !unitsText || !defectiveText || !unitCostText) {
+        showDemoMessage("Please fill in every field.", "error");
+        return;
+      }
+
+      const batchId = Number(batchIdText);
+      const units = Number(unitsText);
+      const defective = Number(defectiveText);
+      const unitCost = Number(unitCostText);
+
+      if (!Number.isInteger(batchId) || !Number.isInteger(units) ||
+          !Number.isInteger(defective) || !Number.isFinite(unitCost)) {
+        showDemoMessage("ID and quantities must be whole numbers; cost must be numeric.", "error");
+        return;
+      }
+      if (units < 0 || defective < 0 || unitCost < 0) {
+        showDemoMessage("Quantities and unit cost cannot be negative.", "error");
+        return;
+      }
+      if (defective > units) {
+        showDemoMessage("Defective units cannot exceed units produced.", "error");
+        return;
+      }
+
+      demoProduction.push([batchId, productName, units, defective, unitCost]);
+      batchForm.reset();
+      renderDemo();
+      showDemoMessage("Batch added. The report has been updated.", "success");
+    });
+
+    document.getElementById("resetDemo").addEventListener("click", () => {
+      demoProduction = initialProduction.map(batch => batch.slice());
+      batchForm.reset();
+      renderDemo();
+      showDemoMessage("Demo reset to the original five batches.", "success");
+    });
+
+    renderDemo();
+    showDemoMessage("Showing the original five batches. Add a batch to update the report.", "success");
+  </script>
+</body>
+</html>
