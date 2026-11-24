@@ -10,3 +10,7 @@ def calculate_overall_defect_percentage(batches):
         return 0.0
     
     return (total_defective / total_produced) * 100
+
+
+if __name__ == "__main__":
+    import manufacturing
