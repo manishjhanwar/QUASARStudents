@@ -40,7 +40,7 @@ def calculate_defect_percentage(production):
 
 # Find batches with more than 10 defective units
 def get_high_defect_batches(production):
-    return [batch for batch in production if batch[3] > 10]
+    return list(filter(lambda batch: batch[3] > 10, production))
 
 
 # Calculate accepted quantities using map()
