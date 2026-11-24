@@ -1,6 +1,7 @@
 
 from manufacturing_utils import total_manufacturing_cost, overall_defect_percentage
 
+# PART 1: Production data
 production = [
     (501, "circuit board", 100, 5, 250),
     (502, "power supply", 80, 12, 400),
@@ -9,10 +10,52 @@ production = [
     (505, "connector", 200, 15, 50)
 ]
 
+print("SMART MANUFACTURING SYSTEM")
+
+# PART 2: Manufacturing calculations
+print("\nProduction Records:")
+for batch in production:
+    print(batch)
+
+print("\nTotal Manufacturing Cost:",
+      total_manufacturing_cost(production))
+
+print("Overall Defect Percentage:",
+      overall_defect_percentage(production), "%")
+
+
+# PART 3: Functional programming
+
+# Filter batches having more than 10 defective units
+defective_batches = list(
+    filter(lambda batch: batch[3] > 10, production)
+)
+
+print("\nBatches with more than 10 defective units:")
+print(defective_batches)
+
+# Map to calculate accepted quantities
+accepted_quantities = list(
+    map(lambda batch: batch[2] - batch[3], production)
+)
+
+print("\nAccepted Quantities:")
+print(accepted_quantities)
+
+# Lambda and map to calculate manufacturing cost of each batch
+batch_costs = list(
+    map(lambda batch: batch[2] * batch[4], production)
+)
+
+print("\nManufacturing Cost of Each Batch:")
+print(batch_costs)
+
+
+# PART 4: Add a new production batch with exception handling
 
 def add_production_batch():
     try:
-        batch_id = int(input("Enter batch ID: "))
+        batch_id = int(input("\nEnter batch ID: "))
         product_name = input("Enter product name: ")
         units = int(input("Enter units produced: "))
         defective = int(input("Enter defective units: "))
@@ -38,8 +81,9 @@ def add_production_batch():
 
 add_production_batch()
 
-print("Total Manufacturing Cost:",
+# Display updated results
+print("\nUpdated Total Manufacturing Cost:",
       total_manufacturing_cost(production))
 
-print("Overall Defect Percentage:",
-      overall_defect_percentage(production))
+print("Updated Overall Defect Percentage:",
+      overall_defect_percentage(production), "%")
